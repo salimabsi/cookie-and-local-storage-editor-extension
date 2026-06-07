@@ -1,15 +1,13 @@
-import { Cookie, Download, Settings, Upload } from 'lucide-react'
+import { Cookie, Settings } from 'lucide-react'
 import { useAppContext } from '../../context/AppContext'
 import { Tooltip } from '../shared/Tooltip'
 import { DomainBadge } from './DomainBadge'
 
 interface HeaderProps {
-  onExport: () => void
-  onImport: () => void
   onSettings: () => void
 }
 
-export function Header({ onExport, onImport, onSettings }: HeaderProps) {
+export function Header({ onSettings }: HeaderProps) {
   const { state } = useAppContext()
 
   return (
@@ -20,26 +18,6 @@ export function Header({ onExport, onImport, onSettings }: HeaderProps) {
           <span className="text-sm font-semibold text-gray-50">DevStorage</span>
         </div>
         <div className="flex items-center gap-1">
-          <Tooltip label="Export data as JSON">
-            <button
-              type="button"
-              aria-label="Export"
-              onClick={onExport}
-              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 hover:text-gray-100"
-            >
-              <Download className="h-4 w-4" />
-            </button>
-          </Tooltip>
-          <Tooltip label="Import data from JSON">
-            <button
-              type="button"
-              aria-label="Import"
-              onClick={onImport}
-              className="rounded p-1.5 text-gray-400 hover:bg-gray-800 hover:text-gray-100"
-            >
-              <Upload className="h-4 w-4" />
-            </button>
-          </Tooltip>
           <Tooltip label="Settings">
             <button
               type="button"

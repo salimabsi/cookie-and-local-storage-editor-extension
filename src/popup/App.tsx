@@ -5,15 +5,13 @@ import { Header } from './components/layout/Header'
 import { StatusBar } from './components/layout/StatusBar'
 import { TabBar } from './components/layout/TabBar'
 import { Toolbar } from './components/layout/Toolbar'
-import { ImportModal } from './components/shared/ImportModal'
 import { SettingsModal } from './components/shared/SettingsModal'
 import { StoragePanel } from './components/storage/StoragePanel'
-import { cookieToInput } from './utils/cookie.utils'
 import { AppProvider, useAppContext } from './context/AppContext'
 import { ToastProvider, useToast } from './context/ToastContext'
 import { useKeyboard } from './hooks/useKeyboard'
 import { useSettings } from './hooks/useSettings'
-import { buildExportData, downloadJson, exportFilename, type ExportData } from './utils/export.utils'
+import { buildExportData, downloadJson, exportFilename } from './utils/export.utils'
 
 function ActivePanel() {
   const { state } = useAppContext()
@@ -31,10 +29,9 @@ function ActivePanel() {
 }
 
 function AppShell() {
-  const { state, cookieOps, localStorageOps, sessionStorageOps } = useAppContext()
+  const { state } = useAppContext()
   const { showToast } = useToast()
   const { popupWidth, setPopupWidth, resetPopupWidth } = useSettings()
-  const [importOpen, setImportOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   const handleExport = () => {
@@ -43,31 +40,17 @@ function AppShell() {
     showToast(`Exported data for ${state.domain}`)
   }
 
-  const handleImport = async (data: ExportData) => {
-    try {
-      await Promise.all([
-        ...data.cookies.map((cookie) => cookieOps.saveCookie(cookieToInput(cookie))),
-        ...data.localStorage.map((entry) => localStorageOps.saveEntry(entry.key, entry.value)),
-        ...data.sessionStorage.map((entry) => sessionStorageOps.saveEntry(entry.key, entry.value)),
-      ])
-      showToast(`Imported data for ${data.domain}`)
-    } catch {
-      showToast('Failed to import data', 'error')
-    }
-  }
-
   useKeyboard({ onExport: handleExport })
 
   return (
     <div className="relative flex h-full w-full flex-col bg-gray-950 text-gray-50">
-      <Header onExport={handleExport} onImport={() => setImportOpen(true)} onSettings={() => setSettingsOpen(true)} />
+      <Header onSettings={() => setSettingsOpen(true)} />
       <TabBar />
       <Toolbar />
       <div className="flex-1 overflow-hidden">
         <ActivePanel />
       </div>
       <StatusBar />
-      {importOpen && <ImportModal onClose={() => setImportOpen(false)} onImport={handleImport} />}
       {settingsOpen && (
         <SettingsModal
           popupWidth={popupWidth}

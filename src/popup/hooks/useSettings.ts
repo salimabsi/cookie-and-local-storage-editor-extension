@@ -3,9 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 const POPUP_WIDTH_KEY = 'devstorage:popupWidth'
 const PERSIST_DEBOUNCE_MS = 300
 
-export const DEFAULT_POPUP_WIDTH = 600
+export const DEFAULT_POPUP_WIDTH = 800
 export const MIN_POPUP_WIDTH = 420
-export const MAX_POPUP_WIDTH = 900
+export const MAX_POPUP_WIDTH = 800
 
 export interface UseSettingsResult {
   popupWidth: number
