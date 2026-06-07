@@ -375,7 +375,7 @@ keyframes: {
 
 ## Implementation Sequence
 
-1. **Scaffold** — `npm create vite` (React + TypeScript), install deps, write `manifest.json` + `vite.config.ts`, confirm popup loads in Chrome
+1. **Scaffold** — `bun create vite` (React + TypeScript), `bun install` deps, write `manifest.json` + `vite.config.ts`, confirm popup loads in Chrome
 2. **Data layer** — `useActiveTab` → `useCookies` → `useStorage` → wire all into `AppContext`
 3. **Core UI** — Header, TabBar, StatusBar; then CookieTable + StorageTable (read-only display first)
 4. **Write ops** — EditCookieForm, EditStorageForm, ConfirmInline delete, ClearAll two-step
@@ -388,20 +388,19 @@ keyframes: {
 
 ```bash
 # Runtime
-react react-dom
-lucide-react
+bun add react react-dom lucide-react
 
 # Dev
-vite @vitejs/plugin-react @crxjs/vite-plugin
-typescript @types/react @types/react-dom @types/chrome
-tailwindcss autoprefixer postcss
+bun add -d vite @vitejs/plugin-react @crxjs/vite-plugin \
+  typescript @types/react @types/react-dom @types/chrome \
+  tailwindcss autoprefixer postcss
 ```
 
 ---
 
 ## Verification Steps
 
-1. Build: `npm run build` — no TypeScript errors
+1. Build: `bun run build` — no TypeScript errors
 2. Load unpacked extension from `dist/` in `chrome://extensions` (Developer Mode)
 3. Navigate to any site, open popup — cookies table populates with domain's cookies
 4. Edit a cookie value → verify change in DevTools → Application → Cookies
