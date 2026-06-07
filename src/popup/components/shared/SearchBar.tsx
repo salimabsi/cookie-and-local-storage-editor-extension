@@ -9,6 +9,7 @@ export function SearchBar() {
       <Search className="h-3.5 w-3.5 shrink-0" />
       <input
         type="text"
+        data-search-input
         value={state.searchQuery}
         onChange={(event) => dispatch({ type: 'SET_SEARCH_QUERY', query: event.target.value })}
         placeholder="Search…"

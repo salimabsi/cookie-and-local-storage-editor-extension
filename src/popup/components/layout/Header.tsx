@@ -2,7 +2,12 @@ import { Cookie, Download, Settings, Upload } from 'lucide-react'
 import { useAppContext } from '../../context/AppContext'
 import { DomainBadge } from './DomainBadge'
 
-export function Header() {
+interface HeaderProps {
+  onExport: () => void
+  onImport: () => void
+}
+
+export function Header({ onExport, onImport }: HeaderProps) {
   const { state } = useAppContext()
 
   return (
@@ -17,6 +22,7 @@ export function Header() {
             type="button"
             title="Export"
             aria-label="Export"
+            onClick={onExport}
             className="rounded p-1.5 text-gray-400 hover:bg-gray-800 hover:text-gray-100"
           >
             <Download className="h-4 w-4" />
@@ -25,6 +31,7 @@ export function Header() {
             type="button"
             title="Import"
             aria-label="Import"
+            onClick={onImport}
             className="rounded p-1.5 text-gray-400 hover:bg-gray-800 hover:text-gray-100"
           >
             <Upload className="h-4 w-4" />

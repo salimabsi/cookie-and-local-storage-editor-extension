@@ -1,3 +1,5 @@
+import { Database } from 'lucide-react'
+import { EmptyState } from '../shared/EmptyState'
 import type { StorageArea, StorageEntry } from '../../types/storage.types'
 import { EditStorageForm } from './EditStorageForm'
 import { StorageRow } from './StorageRow'
@@ -7,6 +9,8 @@ interface StorageTableProps {
   area: StorageArea
   expandedRowId: string | null
   addingNew: boolean
+  searchQuery: string
+  recentlyChanged: Set<string>
   onEdit: (entry: StorageEntry) => void
   onCancelEdit: () => void
   onSave: (key: string, value: string, previousKey?: string) => Promise<void> | void
@@ -19,6 +23,11 @@ const EMPTY_LABEL: Record<StorageArea, string> = {
   sessionStorage: 'No sessionStorage entries for this domain',
 }
 
+const EMPTY_DESCRIPTION: Record<StorageArea, string> = {
+  localStorage: 'Keys stored via window.localStorage on this site will appear here.',
+  sessionStorage: 'Keys stored via window.sessionStorage on this site will appear here.',
+}
+
 const EMPTY_ENTRY: StorageEntry = { key: '', value: '' }
 
 export function StorageTable({
@@ -26,6 +35,8 @@ export function StorageTable({
   area,
   expandedRowId,
   addingNew,
+  searchQuery,
+  recentlyChanged,
   onEdit,
   onCancelEdit,
   onSave,
@@ -33,10 +44,10 @@ export function StorageTable({
   onCancelAdd,
 }: StorageTableProps) {
   if (entries.length === 0 && !addingNew) {
-    return (
-      <div className="flex h-full items-center justify-center text-xs text-gray-500">
-        {EMPTY_LABEL[area]}
-      </div>
+    return searchQuery.trim() ? (
+      <EmptyState icon={Database} title="No entries match your search" description={`No results for "${searchQuery}"`} />
+    ) : (
+      <EmptyState icon={Database} title={EMPTY_LABEL[area]} description={EMPTY_DESCRIPTION[area]} />
     )
   }
 
@@ -63,6 +74,8 @@ export function StorageTable({
             key={entry.key}
             entry={entry}
             isExpanded={expandedRowId === entry.key}
+            searchQuery={searchQuery}
+            isRecentlyChanged={recentlyChanged.has(entry.key)}
             onEdit={() => onEdit(entry)}
             onCancelEdit={onCancelEdit}
             onSave={onSave}

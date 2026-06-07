@@ -1,10 +1,18 @@
 import { Plus } from 'lucide-react'
 import { useAppContext } from '../../context/AppContext'
+import { useToast } from '../../context/ToastContext'
 import { ClearAll } from '../shared/ClearAll'
 import { SearchBar } from '../shared/SearchBar'
 
+const TAB_LABEL: Record<string, string> = {
+  cookies: 'Cookies',
+  localStorage: 'localStorage',
+  sessionStorage: 'sessionStorage',
+}
+
 export function Toolbar() {
   const { state, dispatch, cookieOps, localStorageOps, sessionStorageOps } = useAppContext()
+  const { showToast } = useToast()
 
   if (state.activeTab === 'indexedDB') {
     return (
@@ -39,7 +47,17 @@ export function Toolbar() {
         <Plus className="h-3.5 w-3.5" />
         Add
       </button>
-      <ClearAll onClear={ops.clearAll} disabled={count === 0} />
+      <ClearAll
+        onClear={async () => {
+          try {
+            await ops.clearAll()
+            showToast(`Cleared all ${TAB_LABEL[state.activeTab]}`)
+          } catch {
+            showToast(`Failed to clear ${TAB_LABEL[state.activeTab]}`, 'error')
+          }
+        }}
+        disabled={count === 0}
+      />
     </div>
   )
 }

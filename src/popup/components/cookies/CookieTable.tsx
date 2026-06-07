@@ -1,3 +1,5 @@
+import { Cookie } from 'lucide-react'
+import { EmptyState } from '../shared/EmptyState'
 import type { ChromeCookie, ChromeCookieInput } from '../../types/cookie.types'
 import { cookieRowId, emptyCookieInput } from '../../utils/cookie.utils'
 import { CookieRow } from './CookieRow'
@@ -8,6 +10,8 @@ interface CookieTableProps {
   domain: string
   expandedRowId: string | null
   addingNew: boolean
+  searchQuery: string
+  recentlyChanged: Set<string>
   onEdit: (cookie: ChromeCookie) => void
   onCancelEdit: () => void
   onSave: (input: ChromeCookieInput, previousName?: string) => Promise<void> | void
@@ -20,6 +24,8 @@ export function CookieTable({
   domain,
   expandedRowId,
   addingNew,
+  searchQuery,
+  recentlyChanged,
   onEdit,
   onCancelEdit,
   onSave,
@@ -27,10 +33,14 @@ export function CookieTable({
   onCancelAdd,
 }: CookieTableProps) {
   if (cookies.length === 0 && !addingNew) {
-    return (
-      <div className="flex h-full items-center justify-center text-xs text-gray-500">
-        No cookies for this domain
-      </div>
+    return searchQuery.trim() ? (
+      <EmptyState icon={Cookie} title="No cookies match your search" description={`No results for "${searchQuery}"`} />
+    ) : (
+      <EmptyState
+        icon={Cookie}
+        title="No cookies for this domain"
+        description="Cookies set by this site will appear here. Click + Add to create one."
+      />
     )
   }
 
@@ -63,6 +73,8 @@ export function CookieTable({
               key={rowId}
               cookie={cookie}
               isExpanded={expandedRowId === rowId}
+              searchQuery={searchQuery}
+              isRecentlyChanged={recentlyChanged.has(rowId)}
               onEdit={() => onEdit(cookie)}
               onCancelEdit={onCancelEdit}
               onSave={onSave}

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, type Dispatch, type ReactNode } from 'react'
 import { useActiveTab } from '../hooks/useActiveTab'
 import { useCookies } from '../hooks/useCookies'
+import { useIndexedDB } from '../hooks/useIndexedDB'
 import { useStorage } from '../hooks/useStorage'
 import type { Action, AppState } from '../types/app.types'
 
@@ -66,6 +67,7 @@ interface AppContextValue {
   cookieOps: ReturnType<typeof useCookies>
   localStorageOps: ReturnType<typeof useStorage>
   sessionStorageOps: ReturnType<typeof useStorage>
+  indexedDBOps: ReturnType<typeof useIndexedDB>
 }
 
 const AppContext = createContext<AppContextValue | null>(null)
@@ -76,6 +78,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const cookieOps = useCookies(activeTabInfo.domain, activeTabInfo.tabUrl)
   const localStorageOps = useStorage(activeTabInfo.tabId, 'localStorage')
   const sessionStorageOps = useStorage(activeTabInfo.tabId, 'sessionStorage')
+  const indexedDBOps = useIndexedDB(activeTabInfo.tabId)
 
   useEffect(() => {
     dispatch({ type: 'SET_TAB_INFO', ...activeTabInfo })
@@ -106,11 +109,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [sessionStorageOps.loading])
 
   useEffect(() => {
-    const error = cookieOps.error ?? localStorageOps.error ?? sessionStorageOps.error
-    dispatch({ type: 'SET_ERROR', error })
-  }, [cookieOps.error, localStorageOps.error, sessionStorageOps.error])
+    dispatch({ type: 'SET_INDEXEDDB_DATABASES', databases: indexedDBOps.databases })
+  }, [indexedDBOps.databases])
 
-  const value: AppContextValue = { state, dispatch, cookieOps, localStorageOps, sessionStorageOps }
+  useEffect(() => {
+    dispatch({ type: 'SET_LOADING', tab: 'indexedDB', loading: indexedDBOps.loading })
+  }, [indexedDBOps.loading])
+
+  useEffect(() => {
+    const error = cookieOps.error ?? localStorageOps.error ?? sessionStorageOps.error ?? indexedDBOps.error
+    dispatch({ type: 'SET_ERROR', error })
+  }, [cookieOps.error, localStorageOps.error, sessionStorageOps.error, indexedDBOps.error])
+
+  const value: AppContextValue = {
+    state,
+    dispatch,
+    cookieOps,
+    localStorageOps,
+    sessionStorageOps,
+    indexedDBOps,
+  }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
