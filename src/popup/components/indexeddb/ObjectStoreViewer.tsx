@@ -32,15 +32,15 @@ export function ObjectStoreViewer({ database }: ObjectStoreViewerProps) {
         <colgroup>
           <col className="w-40" />
           <col />
-          <col className="w-28" />
-          <col className="w-20" />
+          <col className="w-[144px]" />
+          <col className="w-[90px]" />
         </colgroup>
         <thead>
           <tr className="h-8 border-b border-gray-700 text-xs font-semibold uppercase tracking-wide text-gray-400">
-            <th className="px-3">Object store</th>
-            <th className="px-3">Key path</th>
-            <th className="px-3">Auto increment</th>
-            <th className="px-3">Records</th>
+            <th className="truncate px-3">Object store</th>
+            <th className="truncate px-3">Key path</th>
+            <th className="truncate px-3">Auto increment</th>
+            <th className="truncate px-3">Records</th>
           </tr>
         </thead>
         <tbody>

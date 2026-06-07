@@ -50,16 +50,16 @@ export function CookieTable({
         <col className="w-40" />
         <col />
         <col className="w-[90px]" />
-        <col className="w-[60px]" />
-        <col className="w-16" />
+        <col className="w-[70px]" />
+        <col className="w-[88px]" />
       </colgroup>
       <thead>
         <tr className="h-8 border-b border-gray-700 text-xs font-semibold uppercase tracking-wide text-gray-400">
-          <th className="px-3">Name</th>
-          <th className="px-3">Value</th>
-          <th className="px-3">Expires</th>
-          <th className="px-3">Flags</th>
-          <th className="px-3">Actions</th>
+          <th className="truncate px-3">Name</th>
+          <th className="truncate px-3">Value</th>
+          <th className="truncate px-3">Expires</th>
+          <th className="truncate px-3">Flags</th>
+          <th className="truncate px-3">Actions</th>
         </tr>
       </thead>
       <tbody>
