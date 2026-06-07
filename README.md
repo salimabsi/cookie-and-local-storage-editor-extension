@@ -1,4 +1,4 @@
-# Cookie & Storage Editor
+# Cookie & Local Storage Editor
 
 Chrome extension (MV3) for viewing, creating, editing, and deleting cookies, localStorage, and sessionStorage for the active tab.
 

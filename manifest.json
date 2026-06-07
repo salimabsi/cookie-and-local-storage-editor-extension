@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Cookie & Storage Editor",
+  "name": "Cookie & Local Storage Editor",
   "version": "1.0.0",
   "permissions": ["cookies", "storage", "tabs", "scripting", "activeTab"],
   "host_permissions": ["<all_urls>"],
