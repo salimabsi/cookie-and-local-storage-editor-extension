@@ -6,6 +6,10 @@ export function buildCookieUrl(domain: string, path: string, secure: boolean): s
   return `${secure ? 'https' : 'http'}://${host}${path}`
 }
 
+export function cookieRowId(cookie: Pick<ChromeCookie, 'name' | 'domain' | 'path'>): string {
+  return `${cookie.name}|${cookie.domain}|${cookie.path}`
+}
+
 export function cookieToInput(cookie: ChromeCookie): ChromeCookieInput {
   return {
     name: cookie.name,
