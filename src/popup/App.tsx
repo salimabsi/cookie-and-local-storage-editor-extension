@@ -6,11 +6,13 @@ import { StatusBar } from './components/layout/StatusBar'
 import { TabBar } from './components/layout/TabBar'
 import { Toolbar } from './components/layout/Toolbar'
 import { ImportModal } from './components/shared/ImportModal'
+import { SettingsModal } from './components/shared/SettingsModal'
 import { StoragePanel } from './components/storage/StoragePanel'
 import { cookieToInput } from './utils/cookie.utils'
 import { AppProvider, useAppContext } from './context/AppContext'
 import { ToastProvider, useToast } from './context/ToastContext'
 import { useKeyboard } from './hooks/useKeyboard'
+import { useSettings } from './hooks/useSettings'
 import { buildExportData, downloadJson, exportFilename, type ExportData } from './utils/export.utils'
 
 function ActivePanel() {
@@ -31,7 +33,9 @@ function ActivePanel() {
 function AppShell() {
   const { state, cookieOps, localStorageOps, sessionStorageOps } = useAppContext()
   const { showToast } = useToast()
+  const { popupWidth, setPopupWidth, resetPopupWidth } = useSettings()
   const [importOpen, setImportOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   const handleExport = () => {
     const data = buildExportData(state.domain, state.cookies, state.localStorage, state.sessionStorage)
@@ -56,7 +60,7 @@ function AppShell() {
 
   return (
     <div className="relative flex h-full w-full flex-col bg-gray-950 text-gray-50">
-      <Header onExport={handleExport} onImport={() => setImportOpen(true)} />
+      <Header onExport={handleExport} onImport={() => setImportOpen(true)} onSettings={() => setSettingsOpen(true)} />
       <TabBar />
       <Toolbar />
       <div className="flex-1 overflow-hidden">
@@ -64,6 +68,14 @@ function AppShell() {
       </div>
       <StatusBar />
       {importOpen && <ImportModal onClose={() => setImportOpen(false)} onImport={handleImport} />}
+      {settingsOpen && (
+        <SettingsModal
+          popupWidth={popupWidth}
+          onChangeWidth={setPopupWidth}
+          onResetWidth={resetPopupWidth}
+          onClose={() => setSettingsOpen(false)}
+        />
+      )}
     </div>
   )
 }
