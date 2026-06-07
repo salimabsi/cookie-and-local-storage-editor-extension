@@ -1,5 +1,5 @@
 {
-  "name": "cookie-and-storage-editor-extension",
+  "name": "cookie-and-local-storage-editor-extension",
   "private": true,
   "version": "0.0.0",
   "type": "module",
